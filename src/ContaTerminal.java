@@ -123,7 +123,7 @@ public class ContaTerminal {
         System.out.println(" ");
         System.out.println("╔═ Bem vindo Sr." + nomeCliente);
         System.out.println("║ Agencia.: " + agenciaBanco + "   Conta.: " + numeroContaBanco);
-        System.out.println("║ Seu saldo.: " + saldo);
+        System.out.println("║ Seu saldo.: %.2f %n" + saldo);
         System.out.println("╚════════════════════════════════");
         System.out.println(" ");
         System.out.println("╔═════════════ BankDigitalBank ════════════╗");
