@@ -2,6 +2,7 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 public class ContaTerminal {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -13,6 +14,8 @@ public class ContaTerminal {
         boolean verificarLogin = false;
 
         Scanner scanner = new Scanner(System.in).useLocale(Locale.US);
+
+        DecimalFormat formatarDecimal = new DecimalFormat("0.00");
 
         interfaceInicialBanco();
 
@@ -29,7 +32,7 @@ public class ContaTerminal {
                     System.out.println("╚════════════════════════════════════════════");
 
                     carregando();
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.SECONDS.sleep(2);
 
                     System.out.println(" ");
                     System.out.println("╔═════════════ BankDigitalBank ══════════════╗");
@@ -50,7 +53,7 @@ public class ContaTerminal {
                     System.out.println("╚════════════════════════════════════════════");
 
                     carregando();
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.SECONDS.sleep(2);
 
                     if (numeroContaBanco != inputNumeroContaBanco && nomeCliente != inputNomeCliente) {
                         limpaConsole();
@@ -60,7 +63,8 @@ public class ContaTerminal {
 
                     verificarLogin = true;
 
-                    interfaceUsuarioBanco(idMenu, agenciaBanco, numeroContaBanco, saldo, nomeCliente, scanner);
+                    interfaceUsuarioBanco(idMenu, agenciaBanco, numeroContaBanco, saldo, nomeCliente, scanner,
+                            formatarDecimal);
 
                     idMenu = scanner.nextInt();
                     System.out.println(" ");
@@ -73,11 +77,12 @@ public class ContaTerminal {
                     }
                     System.out.println("╔═════════════ BankDigitalBank ═════════════╗");
                     System.out.println("║ Digite o valor que voce deseja adicinar.: ║");
-                    saldo = saldo + scanner.nextInt();
-                    System.out.print("");
+                    System.out.print("║ valor.: ");
                     System.out.println("╚═══════════════════════════════════════════╝");
+                    saldo = saldo + scanner.nextInt();
 
-                    interfaceUsuarioBanco(idMenu, agenciaBanco, numeroContaBanco, saldo, nomeCliente, scanner);
+                    interfaceUsuarioBanco(idMenu, agenciaBanco, numeroContaBanco, saldo, nomeCliente, scanner,
+                            formatarDecimal);
                     idMenu = scanner.nextInt();
                     System.out.println(" ");
                     break;
@@ -87,11 +92,27 @@ public class ContaTerminal {
                         break;
                     }
                     System.out.println("╔═════════════ BankDigitalBank ═════════════╗");
-                    System.out.print("║ Digite o valor que voce deseja sacar......: ║");
-                    saldo = saldo - scanner.nextInt();
-                    System.out.println("╚═══════════════════════════════════════════╝");
+                    System.out.println("║ Digite o valor que voce deseja sacar....: ║");
+                    System.out.print("║ valor.: ");
 
-                    interfaceUsuarioBanco(idMenu, agenciaBanco, numeroContaBanco, saldo, nomeCliente, scanner);
+                    int valorSolicitado = scanner.nextInt();
+
+                    carregando();
+                    TimeUnit.SECONDS.sleep(2);
+
+                    if (valorSolicitado < saldo) {
+                        saldo = saldo - valorSolicitado;
+                    } else {
+                        System.out.println(" ");
+                        System.out.println("║ Não foi possivel sacar,  ");
+                        System.out.println("║ valor superior ao saldo na conta, ");
+                    }
+
+                    System.out.println("╚═══════════════════════════════════════════╝");
+                    TimeUnit.SECONDS.sleep(4);
+
+                    interfaceUsuarioBanco(idMenu, agenciaBanco, numeroContaBanco, saldo, nomeCliente, scanner,
+                            formatarDecimal);
                     idMenu = scanner.nextInt();
                     System.out.println(" ");
                     break;
@@ -119,11 +140,11 @@ public class ContaTerminal {
     }
 
     public static void interfaceUsuarioBanco(int idMenu, String agenciaBanco, int numeroContaBanco, Double saldo,
-            String nomeCliente, Scanner scanner) {
+            String nomeCliente, Scanner scanner, DecimalFormat formatarDecimal) {
         System.out.println(" ");
         System.out.println("╔═ Bem vindo Sr." + nomeCliente);
         System.out.println("║ Agencia.: " + agenciaBanco + "   Conta.: " + numeroContaBanco);
-        System.out.println("║ Seu saldo.: %.2f %n" + saldo);
+        System.out.println("║ Seu saldo.: " + formatarDecimal.format(saldo));
         System.out.println("╚════════════════════════════════");
         System.out.println(" ");
         System.out.println("╔═════════════ BankDigitalBank ════════════╗");
@@ -141,6 +162,6 @@ public class ContaTerminal {
 
     public static void carregando() {
         System.out.println(" ");
-        System.out.println(" Aguarde .....");
+        System.out.println("  Aguarde .....");
     }
 }
